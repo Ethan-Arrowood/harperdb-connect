@@ -1,27 +1,36 @@
 {
   "name": "harperdb-connect",
   "version": "0.0.1",
-  "description": "Node.JS module for connecting to HarperDB and simplifying HTTP requests.",
-  "main": "index.js",
+  "description":
+    "Node.JS module for connecting to HarperDB and simplifying HTTP requests.",
+  "main": "harperdb-connect.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "precommit": "lint-staged",
+    "prepush": "npm test"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ethan-Arrowood/harperdb-connect.git"
   },
-  "keywords": [
-    "nodejs",
-    "harperdb",
-    "database",
-    "http",
-    "request",
-    "es6"
-  ],
+  "keywords": ["nodejs", "harperdb", "database", "http", "request", "es6"],
   "author": "Ethan Arrowood",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Ethan-Arrowood/harperdb-connect/issues"
   },
-  "homepage": "https://github.com/Ethan-Arrowood/harperdb-connect#readme"
+  "homepage": "https://github.com/Ethan-Arrowood/harperdb-connect#readme",
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "jest": "^22.0.4",
+    "lint-staged": "^6.0.0",
+    "prettier": "^1.9.2"
+  },
+  "dependencies": {
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5"
+  }
 }
