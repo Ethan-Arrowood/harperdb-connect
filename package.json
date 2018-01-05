@@ -1,0 +1,27 @@
+{
+  "name": "harperdb-connect",
+  "version": "0.0.1",
+  "description": "Node.JS module for connecting to HarperDB and simplifying HTTP requests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ethan-Arrowood/harperdb-connect.git"
+  },
+  "keywords": [
+    "nodejs",
+    "harperdb",
+    "database",
+    "http",
+    "request",
+    "es6"
+  ],
+  "author": "Ethan Arrowood",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ethan-Arrowood/harperdb-connect/issues"
+  },
+  "homepage": "https://github.com/Ethan-Arrowood/harperdb-connect#readme"
+}
