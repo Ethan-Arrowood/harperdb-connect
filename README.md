@@ -1,4 +1,4 @@
-# HarperDB Connet
+# HarperDB Connet [![Build Status](https://travis-ci.org/Ethan-Arrowood/harperdb-connect.svg?branch=master)](https://travis-ci.org/Ethan-Arrowood/harperdb-connect)
 Developed by Ethan Arrowood
 
 ```js
