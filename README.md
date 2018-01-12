@@ -7,6 +7,8 @@
 
 Developed by Ethan Arrowood
 
+Potential use cases:
+(API will be designed to satisfy the following use patterns)
 ```js
 const db = new HarperDBConnect(
   'username', 
@@ -34,3 +36,5 @@ db
   .then(res => console.log(`Database responded with: ${res}`))
   .catch(err => console.log(`Database request error: ${err}`))
 ```
+
+This API is to be used with HarperDB Community Edition
