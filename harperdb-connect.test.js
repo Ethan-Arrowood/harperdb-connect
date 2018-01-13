@@ -38,6 +38,7 @@ describe('HarperDBConnect Class', () => {
 
   test('can be instantiated with username, password, and url', async () => {
     expect.assertions(3)
+    db = await new HarperDBConnect('username', 'password', 'http://mockdb.url/')
     expect(db).toBeDefined()
     expect(db).toBeInstanceOf(HarperDBConnect)
     expect(db.options.url).toBeDefined()
