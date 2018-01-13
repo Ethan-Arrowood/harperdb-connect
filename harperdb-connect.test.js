@@ -1,44 +1,158 @@
 const nock = require('nock')
-const { HarperDBConnect } = require("./harperdb-connect");
+const { HarperDBConnect } = require('./harperdb-connect')
 
+let db
 describe('HarperDBConnect Class', () => {
   beforeAll(() => {
     const harperDB = nock('http://mockdb.url')
-                      .post('/', {
-                        operation: 'describe_all'
-                      })
-                      .reply(201, {})
-                      .persist()
+      .post('/', {
+        operation: 'describe_all',
+      })
+      .reply(201, { foo: 'bar' })
+      .persist()
   })
-  test("can be instantiated with only username and password", () => {
-    const db = new HarperDBConnect("username", "password");
-    expect(db).toBeDefined();
-    expect(db).toBeInstanceOf(HarperDBConnect);
+
+  beforeEach(async () => {
+    try {
+      db = await new HarperDBConnect(
+        'username',
+        'password',
+        'http://mockdb.url/'
+      )
+    } catch (err) {
+      throw new Error(`Error in beforeEach set up: ${err}`)
+    }
+  })
+
+  afterEach(() => {
+    db = undefined
+  })
+
+  test('can be instantiated with only username and password', () => {
+    db = new HarperDBConnect('username', 'password')
+    expect(db).toBeDefined()
+    expect(db).toBeInstanceOf(HarperDBConnect)
     expect(typeof db.authorization).toBe('string')
-  });
-  test("can be instantiated with username, password, and url", async () => {
-    const db = await new HarperDBConnect("username", "password", "http://mockdb.url/")
+  })
+
+  test('can be instantiated with username, password, and url', async () => {
     expect(db).toBeDefined()
     expect(db).toBeInstanceOf(HarperDBConnect)
     expect(db.options.url).toBeDefined()
   })
-  test("resolves request without useDefault", async () => {
-    const db = await new HarperDBConnect("username", "password", "http://mockdb.url/")
-    await expect(db.request({
-      method: 'POST',
-        url: db.options.url,
-        headers: {
-          'content-type': 'application/json',
-          authorization: db.authorization,
-        },
-        json: true,
-        body: { operation: 'describe_all' }
-    }, false)).resolves.toEqual({})
-  })
-  test.skip("resolves request with useDefault")
-  test.skip("rejects request when not connected")
-  test.skip("rejects request with invalid options")
-  test.skip("method request throws error for invalid parameters")
-  test.skip("method connect throws error for invalid parameters")
 
+  test('instantiation rejects bad connection', async () => {
+    try {
+      db = await new HarperDBConnect('username', 'password', 'http://bad.url')
+    } catch (e) {
+      expect(e).toContain('Error connecting to http://bad.url')
+    }
+  })
+
+  test('resolves connection with valid options.url', async () => {
+    db = new HarperDBConnect('username', 'password')
+    db.setDefaultOptions({ url: 'http://mockdb.url' })
+    await expect(db.connect()).resolves.toBe('http://mockdb.url')
+  })
+
+  test('rejects connection with bad url', async () => {
+    db = new HarperDBConnect('username', 'password')
+    try {
+      await db.connect('http://bad.url')
+    } catch (e) {
+      expect(e.toString()).toContain('RequestError')
+    }
+  })
+
+  test('resolves request without useDefault', async () => {
+    await expect(
+      db.request(
+        {
+          method: 'POST',
+          url: db.options.url,
+          headers: {
+            'content-type': 'application/json',
+            authorization: db.authorization,
+          },
+          json: true,
+          body: { operation: 'describe_all' },
+        },
+        false
+      )
+    ).resolves.toEqual({ foo: 'bar' })
+  })
+
+  test('resolves request with useDefault', async () => {
+    db.setDefaultOptions({
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        authorization: db.authorization,
+      },
+      json: true,
+    })
+
+    await expect(
+      db.request(
+        {
+          operation: 'describe_all',
+        },
+        true
+      )
+    ).resolves.toEqual({ foo: 'bar' })
+  })
+
+  test('rejects request when not connected', async () => {
+    db = new HarperDBConnect('username', 'password')
+
+    await expect(db.request({})).rejects.toEqual(
+      'Instance not connected to database'
+    )
+  })
+
+  test.skip('rejects request with invalid options', async () => {})
+
+  describe('Method Parameters', () => {
+    test('setOperation() throws error for invalid parameters', () => {
+      db = new HarperDBConnect()
+      expect(_ => db.setAuthorization(0, 0)).toThrowError(TypeError)
+      expect(_ => db.setAuthorization(0, 0)).toThrowError(
+        'username and password must be of type string'
+      )
+      expect(_ => db.setAuthorization('', '')).toThrowError(TypeError)
+      expect(_ => db.setAuthorization('', '')).toThrowError(
+        'username and password must be nonempty strings'
+      )
+    })
+
+    test('setDefaultOptions() throws error for invalid parameters', () => {
+      expect(_ => db.setDefaultOptions('notObject')).toThrowError(TypeError)
+      expect(_ => db.setDefaultOptions('notObject')).toThrowError(
+        'options must be defined and of type object'
+      )
+    })
+
+    test('connect() throws error for invalid parameters', () => {
+      db = new HarperDBConnect()
+      expect(_ => db.connect(0)).toThrowError(TypeError)
+      expect(_ => db.connect(0)).toThrowError(
+        'url must be defined and of type string'
+      )
+      expect(_ => db.connect('http://url')).toThrowError(TypeError)
+      expect(_ => db.connect('http://url')).toThrowError(
+        'must set authorization before establishing a connection'
+      )
+    })
+
+    test('request() throws error for invalid parameters', () => {
+      expect(_ => db.request('notObject')).toThrowError(TypeError)
+      expect(_ => db.request('notObject')).toThrowError(
+        'queryOrOptions must be defined and of type object'
+      )
+      expect(_ => db.request({}, 'notBoolean')).toThrowError(TypeError)
+      expect(_ => db.request({}, 'notBoolean')).toThrowError(
+        'useDefault must be a boolean'
+      )
+    })
+  })
 })

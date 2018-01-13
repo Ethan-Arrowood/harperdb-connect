@@ -9,7 +9,7 @@
     "prepush": "npm test"
   },
   "lint-staged": {
-    "*.{js}": [
+    "*.{test.js,js}": [
       "prettier --write",
       "git add"
     ]
