@@ -37,6 +37,7 @@ describe('HarperDBConnect Class', () => {
   })
 
   test('can be instantiated with username, password, and url', async () => {
+    expect.assertions(3)
     expect(db).toBeDefined()
     expect(db).toBeInstanceOf(HarperDBConnect)
     expect(db.options.url).toBeDefined()
@@ -121,6 +122,7 @@ describe('HarperDBConnect Class', () => {
 
   describe('Method Parameters', () => {
     test('setOperation() throws error for invalid parameters', () => {
+      expect.assertions(4)
       db = new HarperDBConnect()
       expect(_ => db.setAuthorization(0, 0)).toThrowError(TypeError)
       expect(_ => db.setAuthorization(0, 0)).toThrowError(
@@ -133,6 +135,7 @@ describe('HarperDBConnect Class', () => {
     })
 
     test('setDefaultOptions() throws error for invalid parameters', () => {
+      expect.assertions(2)
       expect(_ => db.setDefaultOptions('notObject')).toThrowError(TypeError)
       expect(_ => db.setDefaultOptions('notObject')).toThrowError(
         'options must be defined and of type object'
@@ -140,6 +143,7 @@ describe('HarperDBConnect Class', () => {
     })
 
     test('connect() throws error for invalid parameters', () => {
+      expect.assertions(4)
       db = new HarperDBConnect()
       expect(_ => db.connect(0)).toThrowError(TypeError)
       expect(_ => db.connect(0)).toThrowError(
@@ -152,6 +156,7 @@ describe('HarperDBConnect Class', () => {
     })
 
     test('request() throws error for invalid parameters', () => {
+      expect.assertions(4)
       expect(_ => db.request('notObject')).toThrowError(TypeError)
       expect(_ => db.request('notObject')).toThrowError(
         'queryOrOptions must be defined and of type object'
