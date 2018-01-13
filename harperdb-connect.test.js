@@ -40,8 +40,10 @@ describe('HarperDBConnect Class', () => {
     expect.assertions(3)
     db = await new HarperDBConnect('username', 'password', 'http://mockdb.url/')
     expect(db).toBeDefined()
-    expect(db).toBeInstanceOf(HarperDBConnect)
     expect(db.options.url).toBeDefined()
+    await expect(
+      new HarperDBConnect('username', 'password', 'http://mockdb.url/')
+    ).resolves.toBeInstanceOf(HarperDBConnect)
   })
 
   test('instantiation rejects bad connection', async () => {
