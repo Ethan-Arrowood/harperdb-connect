@@ -29,6 +29,7 @@ describe('HarperDBConnect Class', () => {
   })
 
   test('can be instantiated with only username and password', () => {
+    expect.assertions(3)
     db = new HarperDBConnect('username', 'password')
     expect(db).toBeDefined()
     expect(db).toBeInstanceOf(HarperDBConnect)
@@ -42,6 +43,7 @@ describe('HarperDBConnect Class', () => {
   })
 
   test('instantiation rejects bad connection', async () => {
+    expect.assertions(1)
     try {
       db = await new HarperDBConnect('username', 'password', 'http://bad.url')
     } catch (e) {
@@ -50,12 +52,14 @@ describe('HarperDBConnect Class', () => {
   })
 
   test('resolves connection with valid options.url', async () => {
+    expect.assertions(1)
     db = new HarperDBConnect('username', 'password')
     db.setDefaultOptions({ url: 'http://mockdb.url' })
     await expect(db.connect()).resolves.toBe('http://mockdb.url')
   })
 
   test('rejects connection with bad url', async () => {
+    expect.assertions(1)
     db = new HarperDBConnect('username', 'password')
     try {
       await db.connect('http://bad.url')
@@ -65,6 +69,7 @@ describe('HarperDBConnect Class', () => {
   })
 
   test('resolves request without useDefault', async () => {
+    expect.assertions(1)
     await expect(
       db.request(
         {
@@ -83,6 +88,7 @@ describe('HarperDBConnect Class', () => {
   })
 
   test('resolves request with useDefault', async () => {
+    expect.assertions(1)
     db.setDefaultOptions({
       method: 'POST',
       headers: {
@@ -103,6 +109,7 @@ describe('HarperDBConnect Class', () => {
   })
 
   test('rejects request when not connected', async () => {
+    expect.assertions(1)
     db = new HarperDBConnect('username', 'password')
 
     await expect(db.request({})).rejects.toEqual(
