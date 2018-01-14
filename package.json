@@ -1,6 +1,6 @@
 {
   "name": "harperdb-connect",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Node.JS module for connecting to HarperDB and simplifying HTTP requests.",
   "main": "harperdb-connect.js",
   "scripts": {
@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/Ethan-Arrowood/harperdb-connect#readme",
   "devDependencies": {
+    "coveralls": "^3.0.0",
     "husky": "^0.14.3",
     "jest": "^22.0.4",
     "lint-staged": "^6.0.0",
