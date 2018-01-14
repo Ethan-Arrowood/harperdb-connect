@@ -1,7 +1,7 @@
 # HarperDB Connect 
 
 [![Build Status](https://travis-ci.org/Ethan-Arrowood/harperdb-connect.svg?branch=master)](https://travis-ci.org/Ethan-Arrowood/harperdb-connect)
-
+[![Coverage Status](https://coveralls.io/repos/github/Ethan-Arrowood/harperdb-connect/badge.svg?branch=master)](https://coveralls.io/github/Ethan-Arrowood/harperdb-connect?branch=master)
 
 [![https://nodei.co/npm/harperdb-connect.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/harperdb-connect.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/harperdb-connect)
 
