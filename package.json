@@ -41,6 +41,7 @@
     "prettier": "^1.9.2"
   },
   "dependencies": {
+    "lodash.merge": "^4.6.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5"
   },

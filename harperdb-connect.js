@@ -1,6 +1,11 @@
+const request = require('request')
 const rp = require('request-promise-native')
+const merge = require('lodash.merge')
 
 module.exports.HarperDBConnect = class HarperDBConnect {
+  // Basic constructor. If url is passed trys to connect
+  // and returns a promise so user can properly handle
+  // the request errors from connect() method
   constructor(username, password, url) {
     this.authorization = undefined
     this.isConnected = false
@@ -16,34 +21,48 @@ module.exports.HarperDBConnect = class HarperDBConnect {
           this.options.url = host
           resolve(this)
         } catch (err) {
-          reject(`Error connecting to ${url}. \n${err.message}`)
+          reject(`Error connecting to ${url}. \n${err}`)
         }
       })
     }
   }
 
+  // Synchronous method. Returns auth
   setAuthorization(username, password) {
     if (typeof username !== 'string' && typeof password !== 'string')
       throw new TypeError('username and password must be of type string')
     else if (username.length === 0 && password.length === 0)
       throw new TypeError('username and password must be nonempty strings')
 
-    this.authorization = `Basic ${new Buffer(
-      username + ':' + password
-    ).toString('base64')}`
+    const auth = `Basic ${new Buffer(username + ':' + password).toString(
+      'base64'
+    )}`
+
+    this.authorization = auth
+
+    merge(this.options, {
+      headers: {
+        authorization: auth,
+      },
+    })
+
+    return auth
   }
 
+  // Synchronous method. Returns merged options
   setDefaultOptions(options) {
     if (typeof options !== 'object')
       throw new TypeError('options must be defined and of type object')
 
-    this.options = {
-      ...this.options,
-      ...options,
-    }
+    merge(this.options, options)
+
+    return this.options
   }
 
+  // asynch method attempts to connect to db
+  // returns a promise that resolves with connected url
   connect(url = this.options.url) {
+    this.isConnected = false
     if (typeof url !== 'string')
       throw new TypeError('url must be defined and of type string')
     if (typeof this.authorization !== 'string')
@@ -52,24 +71,29 @@ module.exports.HarperDBConnect = class HarperDBConnect {
       )
 
     return new Promise((resolve, reject) => {
-      rp({
-        method: 'POST',
-        url,
-        headers: {
-          'content-type': 'application/json',
-          authorization: this.authorization,
+      rp(
+        {
+          method: 'POST',
+          url,
+          headers: {
+            'content-type': 'application/json',
+            authorization: this.authorization,
+          },
+          json: true,
+          body: { operation: 'describe_all' },
         },
-        json: true,
-        body: { operation: 'describe_all' },
-      })
+        false
+      )
         .then(res => {
           this.isConnected = true
+          merge(this.options, { url })
           resolve(url)
         })
         .catch(err => reject(err))
     })
   }
 
+  // returns promise
   request(queryOrOptions, useDefault = true) {
     if (typeof queryOrOptions !== 'object')
       throw new TypeError('queryOrOptions must be defined and of type object')
