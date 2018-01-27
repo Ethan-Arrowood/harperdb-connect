@@ -10,14 +10,3 @@ jobs:
     - stage: Produce Coverage
       node_js: node
       script: jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
-    - stage: npm release
-      node_js: node 
-      script: echo "Deploying to npm..."
-      deploy:
-        provider: npm
-        email: ethan.arrowood@gmail.com
-        api_key:
-          secure: zczwP+0oZ1ygsaKQe4UjWsR13uftMjmgIcMWP5kE/BCEtyol/JeAn0ib+/3ZRTBP09J8BHEqcDpTevJbgzbgOv13UOnAoQMwxpmyG56QQG9qtf6+xD1v7MLX1lcV8Jcqdhh0vMLTRkVoH/n1GZdEXHg9bdHm4zJVpiPBZH2MNzRdm2PllTpz5IUxsJ5BNFciPAD43XZbjnD1t+C0yiGGTKhi/dY+RAnPK+Wf3TxY4DxCpSytSE+W5dr2f2OK4ddCwuW6Mvn1Yht4ePop7U0EoBEigSoU2wAnck2S1dYq8sLyONVTZ7BW3GgLSb1ZPLYlkHXj+BBPF8f93inmj6n14WZfnqb5JfLi0deJwowMApXBUZrJCu4pAKYUwFSYZ0WJWZYKYUlWQqVwOmNtYqok/tNvh9IseCrFsJVMozbPInrh2wt8x9QyMedVFsD8fzLHTN2DNdRAkUvP+hZZqusL+5u9mEUERJmcuc5yHdzBgkHTrJRfgq23/SeSjX/mRsl4phl3a3LbXPGlXRKTR6OW/vE4/IQ6tqLhCaNEjnQF+IJlOr9/iYYPWdEJ9nG6Vae2FvpWkjgYRBFxkisQhHEOtpPSBvDK3q8qytVCDDEs7ylKS5pmAFOWSqsvVLqqu7J/q6tqdSImhQE2y9hTOBlf0nkn7fKRHDVeR1D5eUpdcAI=
-        on:
-          repo: Ethan-Arrowood/harperdb-connect
-          branch: master
