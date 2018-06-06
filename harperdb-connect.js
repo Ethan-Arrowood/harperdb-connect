@@ -70,26 +70,29 @@ module.exports.HarperDBConnect = class HarperDBConnect {
         'must set authorization before establishing a connection'
       )
 
-    return new Promise((resolve, reject) => {
-      rp(
-        {
-          method: 'POST',
-          url,
-          headers: {
-            'content-type': 'application/json',
-            authorization: this.authorization,
+    let db = this
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        await rp(
+          {
+            method: 'POST',
+            url,
+            headers: {
+              'content-type': 'application/json',
+              authorization: db.authorization,
+            },
+            json: true,
+            body: { operation: 'describe_all' },
           },
-          json: true,
-          body: { operation: 'describe_all' },
-        },
-        false
-      )
-        .then(res => {
-          this.isConnected = true
-          merge(this.options, { url })
-          resolve(url)
-        })
-        .catch(err => reject(err))
+          false
+        )
+        db.isConnected = true
+        merge(db.options, { url })
+        resolve(url)
+      } catch (err) {
+        reject(err)
+      }
     })
   }
 
