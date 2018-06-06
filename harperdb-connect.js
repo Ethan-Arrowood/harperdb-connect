@@ -34,7 +34,7 @@ module.exports.HarperDBConnect = class HarperDBConnect {
     else if (username.length === 0 && password.length === 0)
       throw new TypeError('username and password must be nonempty strings')
 
-    const auth = `Basic ${new Buffer(username + ':' + password).toString(
+    const auth = `Basic ${Buffer.from(username + ':' + password).toString(
       'base64'
     )}`
 
