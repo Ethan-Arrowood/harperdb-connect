@@ -56,10 +56,19 @@ describe('HarperDBConnect Class', () => {
   })
 
   test('resolves connection with valid options.url', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     db = new HarperDBConnect('username', 'password')
     db.setDefaultOptions({ url: 'http://mockdb.url' })
     await expect(db.connect()).resolves.toBe('http://mockdb.url')
+    expect(db.isConnected).toBeTruthy()
+  })
+
+  test('connect method properly updates instance', async () => {
+    expect.assertions(2)
+    db = new HarperDBConnect('username', 'password')
+    await db.connect('http://mockdb.url')
+    expect(db.isConnected).toBeTruthy()
+    expect(db.options.url).toBe('http://mockdb.url')
   })
 
   test('rejects connection with bad url', async () => {

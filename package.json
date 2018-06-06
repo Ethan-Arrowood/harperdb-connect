@@ -1,6 +1,6 @@
 {
   "name": "harperdb-connect",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Node.JS module for connecting to HarperDB and simplifying HTTP requests.",
   "main": "harperdb-connect.js",
   "scripts": {
