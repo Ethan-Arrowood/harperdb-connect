@@ -6,9 +6,7 @@
   "scripts": {
     "test": "jest",
     "precommit": "lint-staged",
-    "prepush": "npm test",
-    "docs:prepare": "gitbook install",
-    "docs:watch": "npm run docs:prepare && gitbook serve"
+    "prepush": "npm test"
   },
   "lint-staged": {
     "*.{test.js,js}": [
